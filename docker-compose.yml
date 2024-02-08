@@ -1,0 +1,10 @@
+name: mario_party_rl
+services:
+  mario_party_rl:
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        MARIO_PARTY_RL_USER: ${MARIO_PARTY_USER-mario}
+        UID: ${UID-1000}
+        GID: ${GID-1000}
+    user: ${UID-1000}:${GID-1000}
