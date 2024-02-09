@@ -1,6 +1,30 @@
 name: mario_party_rl
 services:
-  mario_party_rl:
+  virutal_frame_buffer_server:
+    build:
+      context: ./virutal_frame_buffer_server
+      dockerfile: ./Dockerfile
+    ports:
+      - "6000:6000"
+    entrypoint: [
+      'Xvfb', ':0',
+      '-screen', '0',
+      '640x480x24',
+      '-fbdir', '/dev/shm', # Framebuffer to use shared memory
+      '-ac', # Disable access control - enables access by any host (https://www.x.org/archive/X11R6.8.1/doc/Xserver.1.html)
+      '-listen', 'tcp' # Allow remote connections over TCP
+    ]
+  vnc_server:
+    build:
+      context: ./vnc_server
+      dockerfile: ./Dockerfile
+    environment:
+      - DISPLAY=virutal_frame_buffer_server:0
+    ports:
+      - "5900:5900"
+    entrypoint: [ 'x11vnc', '-forever', '-viewonly', '-shared', '-nopw', '-noshm' ]
+    depends_on: [ virutal_frame_buffer_server ]
+  mupen64plus_emulator:
     build:
       dockerfile: ./Dockerfile
       args:
@@ -8,3 +32,11 @@ services:
         UID: ${UID-1000}
         GID: ${GID-1000}
     user: ${UID-1000}:${GID-1000}
+    environment:
+      - DISPLAY=virutal_frame_buffer_server:0
+    command: [
+          'mupen64plus',
+          '--resolution', '640x480',
+          '--audio', 'dummy',
+          'roms/mario_party_usa.z64'
+        ]

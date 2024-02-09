@@ -39,4 +39,7 @@ RUN 7z e /home/${MARIO_PARTY_USER}/roms/mario_party.7z -o/home/${MARIO_PARTY_USE
 RUN rm /home/${MARIO_PARTY_USER}/roms/mario_party.7z
 RUN mv /home/${MARIO_PARTY_USER}/roms/'Mario Party (USA).z64' /home/${MARIO_PARTY_USER}/roms/mario_party_usa.z64
 
+RUN apt install libspeexdsp-dev alsa-utils  -y
+RUN usermod -G audio,video ${MARIO_PARTY_USER}
+
 USER ${MARIO_PARTY_USER}
