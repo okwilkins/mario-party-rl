@@ -22,11 +22,6 @@ wget \
 libminizip-dev \
 p7zip-full -y
 
-# Install VirtualGL
-RUN wget https://github.com/VirtualGL/virtualgl/releases/download/3.1/virtualgl_3.1_amd64.deb -O /var/tmp/virtualgl_3.1_amd64.deb
-RUN apt install /var/tmp/virtualgl_3.1_amd64.deb -y
-RUN rm /var/tmp/virtualgl_3.1_amd64.deb
-
 # Install mupen64plus
 RUN wget https://github.com/mupen64plus/mupen64plus-core/releases/download/2.5/mupen64plus-bundle-linux64-2.5.tar.gz -O /var/tmp/mupen64plus-bundle-linux64-2.5.tar.gz
 RUN tar -xvf /var/tmp/mupen64plus-bundle-linux64-2.5.tar.gz -C /var/tmp
@@ -40,7 +35,8 @@ RUN chown -R ${MARIO_PARTY_USER} /home/${MARIO_PARTY_USER}
 # Download Mario Party 64
 RUN mkdir /home/${MARIO_PARTY_USER}/roms
 RUN wget https://archive.org/download/nointro.n64/Mario%20Party%20%28USA%29.7z -O /home/${MARIO_PARTY_USER}/roms/mario_party.7z
-RUN 7z e /home/${MARIO_PARTY_USER}/roms/mario_party.7z
+RUN 7z e /home/${MARIO_PARTY_USER}/roms/mario_party.7z -o/home/${MARIO_PARTY_USER}/roms/
 RUN rm /home/${MARIO_PARTY_USER}/roms/mario_party.7z
+RUN mv /home/${MARIO_PARTY_USER}/roms/'Mario Party (USA).z64' /home/${MARIO_PARTY_USER}/roms/mario_party_usa.z64
 
 USER ${MARIO_PARTY_USER}
