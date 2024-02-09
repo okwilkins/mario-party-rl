@@ -4,16 +4,11 @@ services:
     build:
       context: ./virutal_frame_buffer_server
       dockerfile: ./Dockerfile
+    environment:
+      - PULSE_SERVER=mupen64plus_emulator
     ports:
       - "6000:6000"
-    entrypoint: [
-      'Xvfb', ':0',
-      '-screen', '0',
-      '640x480x24',
-      '-fbdir', '/dev/shm', # Framebuffer to use shared memory
-      '-ac', # Disable access control - enables access by any host (https://www.x.org/archive/X11R6.8.1/doc/Xserver.1.html)
-      '-listen', 'tcp' # Allow remote connections over TCP
-    ]
+    entrypoint:  ['/scripts/start_xvfb.sh']
   vnc_server:
     build:
       context: ./vnc_server
@@ -22,10 +17,11 @@ services:
       - DISPLAY=virutal_frame_buffer_server:0
     ports:
       - "5900:5900"
-    entrypoint: [ 'x11vnc', '-forever', '-viewonly', '-shared', '-nopw', '-noshm' ]
+    entrypoint: ['/scripts/start_vnc_server.sh']
     depends_on: [ virutal_frame_buffer_server ]
   mupen64plus_emulator:
     build:
+      context: ./mupen64plus
       dockerfile: ./Dockerfile
       args:
         MARIO_PARTY_RL_USER: ${MARIO_PARTY_USER-mario}
@@ -34,9 +30,7 @@ services:
     user: ${UID-1000}:${GID-1000}
     environment:
       - DISPLAY=virutal_frame_buffer_server:0
-    command: [
-          'mupen64plus',
-          '--resolution', '640x480',
-          '--audio', 'dummy',
-          'roms/mario_party_usa.z64'
-        ]
+    ports:
+      - "4713:4713"
+    command: ['/scripts/start_mupen64plus.sh']
+    depends_on: [virutal_frame_buffer_server, vnc_server]
