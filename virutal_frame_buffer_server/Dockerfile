@@ -19,5 +19,6 @@ RUN chown -R ${MARIO_PARTY_USER} /home/${MARIO_PARTY_USER}
 
 # Install pulseaudio and avahi for zeroconf
 RUN apt install pulseaudio-module-zeroconf avahi-daemon avahi-utils -y
+RUN apt install pavucontrol pasystray  -y
 
 USER ${MARIO_PARTY_USER}

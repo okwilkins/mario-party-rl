@@ -34,3 +34,11 @@ services:
       - "4713:4713"
     command: ['/scripts/start_mupen64plus.sh']
     depends_on: [virutal_frame_buffer_server, vnc_server]
+  vnc_web_client:
+    build:
+      context: ./vnc_web_client
+      dockerfile: ./Dockerfile
+    ports:
+      - "6080:6080"
+    command: ['/scripts/start_vnc_client.sh']
+    depends_on: [vnc_server]
