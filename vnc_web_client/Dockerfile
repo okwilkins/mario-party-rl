@@ -17,8 +17,16 @@ RUN pip3 install numpy==1.26.4
 COPY start_vnc_client.sh /scripts/start_vnc_client.sh
 RUN chmod +x /scripts/start_vnc_client.sh
 
+# Install noVNC
+RUN wget https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz -O /tmp/noVNC-1.4.0.tar.gz
+RUN tar -xvf /tmp/noVNC-1.4.0.tar.gz -C /usr/share/
+RUN rm /tmp/noVNC-1.4.0.tar.gz
+RUN ln -s /usr/share/noVNC-1.4.0/vnc_lite.html /usr/share/noVNC-1.4.0/index.html
+
+# Install websockify
+RUN pip3 install websockify==0.11.0
+
 WORKDIR /home/${MARIO_PARTY_USER}
-RUN git clone https://github.com/novnc/noVNC
 RUN chown -R ${MARIO_PARTY_USER} /home/${MARIO_PARTY_USER}
 
 USER ${MARIO_PARTY_USER}
