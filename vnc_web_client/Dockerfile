@@ -21,7 +21,8 @@ RUN chmod +x /scripts/start_vnc_client.sh
 RUN wget https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz -O /tmp/noVNC-1.4.0.tar.gz
 RUN tar -xvf /tmp/noVNC-1.4.0.tar.gz -C /usr/share/
 RUN rm /tmp/noVNC-1.4.0.tar.gz
-RUN ln -s /usr/share/noVNC-1.4.0/vnc_lite.html /usr/share/noVNC-1.4.0/index.html
+# Make the vnc.html the default page
+RUN ln -s /usr/share/noVNC-1.4.0/vnc.html /usr/share/noVNC-1.4.0/index.html
 
 # Install websockify
 RUN pip3 install websockify==0.11.0
