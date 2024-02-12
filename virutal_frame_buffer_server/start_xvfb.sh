@@ -1,3 +1,4 @@
 #!/bin/bash
-pulseaudio -D --verbose --exit-idle-time=-1 --disallow-exit
+/usr/bin/pulseaudio -D --exit-idle-time=-1 --disallow-exit --verbose
+
 Xvfb :0 -screen 0 640x480x24 -listen tcp -fbdir /dev/shm -ac
