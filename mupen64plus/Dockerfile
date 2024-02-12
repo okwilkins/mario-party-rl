@@ -10,19 +10,29 @@ RUN useradd -g ${GID} -u ${UID} ${MARIO_PARTY_USER}
 
 RUN apt update && apt-get install -y
 RUN apt-get install build-essential \
-zlib1g zlib1g-dev \
-libsdl2-dev \
-pkg-config \
-libpng-dev \
-libfreetype6-dev \
-libglu1-mesa-dev \
-libvulkan-dev \
-nasm \
-wget \
-libminizip-dev \
-pulseaudio \
-alsa-utils \
-p7zip-full -y
+    zlib1g zlib1g-dev \
+    libsdl2-dev \
+    pkg-config \
+    libpng-dev \
+    libfreetype6-dev \
+    libglu1-mesa-dev \
+    libvulkan-dev \
+    nasm \
+    xvfb \
+    wget \
+    libminizip-dev \
+    pulseaudio \
+    alsa-utils \
+    p7zip-full -y
+
+# Install GStreamer
+RUN apt-get install libgstreamer1.0-dev \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-libav \
+    gstreamer1.0-tools \
+    gstreamer1.0-x \
+    gstreamer1.0-alsa \
+    gstreamer1.0-pulseaudio -y
 
 # Install mupen64plus
 RUN wget https://github.com/mupen64plus/mupen64plus-core/releases/download/2.5/mupen64plus-bundle-linux64-2.5.tar.gz -O /var/tmp/mupen64plus-bundle-linux64-2.5.tar.gz
@@ -42,9 +52,6 @@ RUN mv /home/${MARIO_PARTY_USER}/roms/'Mario Party (USA).z64' /home/${MARIO_PART
 
 COPY start_mupen64plus.sh /scripts/start_mupen64plus.sh
 RUN chmod +x /scripts/start_mupen64plus.sh
-
-# Install pulseaudio and avahi for zeroconf
-RUN apt install pulseaudio-module-zeroconf avahi-daemon avahi-utils -y
 
 RUN chown -R ${MARIO_PARTY_USER} /home/${MARIO_PARTY_USER}
 

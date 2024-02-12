@@ -5,9 +5,10 @@ services:
       context: ./virutal_frame_buffer_server
       dockerfile: ./Dockerfile
     environment:
-      - PULSE_SERVER=mupen64plus_emulator
+      - PULSE_SERVER=tcp:virutal_frame_buffer_server:4713
     ports:
       - "6000:6000"
+      - "4714:4713"
     entrypoint:  ['/scripts/start_xvfb.sh']
   vnc_server:
     build:
